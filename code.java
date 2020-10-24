@@ -39,6 +39,7 @@ class member
 	String roll,name;
 	int id;
 	Global g=new Global();
+	Book_Bank_System bbs=new Book_Bank_System();
 	//for pre defined members to store in database
 	public member Pre_registered(String roll,String name,int id)
 	{
@@ -54,7 +55,7 @@ class member
 		this.roll = roll;
 		this.name = name;
 		this.id=rand.nextInt(1000);//to generate id
-		g.member.add(this);
+		bbs.add(this);
 		return(this);
 	}
 }
@@ -62,22 +63,19 @@ class member
 class Registered_member extends member
 {
 	Global g=new Global();
+	Book_Bank_System bbs=new Book_Bank_System();
 	//method to login
 	public Boolean login(String roll,int id)
 	{
-		Boolean validated=false;
-		for(int i=0;i<g.member.size();i++)
-		{
-			if(g.member.get(i).roll.equals(roll) && g.member.get(i).id==id)
-			{
-				System.out.println("Validated successfully");
-				validated=true;
-				break;
-			}
-		}
+		Boolean validated=bbs.validate(roll,id);
 		if(validated==false)
 		{
 			System.out.println("Validation failed. Retry");
+		}
+		else
+		{
+			System.out.println("Validated successfully");
+
 		}
 		return validated;
 	}
@@ -118,6 +116,28 @@ class Administrator
 	public void Issue_Book(int i,String book)
 	{
 		g.book.set(i,new book(g.book.get(i).book,g.book.get(i).no-1));
+	}
+}
+class Book_Bank_System
+{
+	Global g=new Global();
+	int Working_hours=9;
+	public Boolean validate(String roll,int id)
+	{
+		Boolean validated=false;
+		for(int i=0;i<g.member.size();i++)
+		{
+			if(g.member.get(i).roll.equals(roll) && g.member.get(i).id==id)
+			{
+				validated=true;
+				break;
+			}
+		}
+		return validated;
+	}
+	public void add(member m)
+	{
+		g.member.add(m);
 	}
 }
 //main class
